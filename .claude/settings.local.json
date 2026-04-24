@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter pub *)",
+      "mcp__stitch__list_projects",
+      "mcp__stitch__list_screens",
+      "Bash(curl -s \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sX2MwOWFiNjVhM2E3YjRlYmI4ZjlhMjU2NDYwOGYxZTY4EgsSBxCm-9ndlRkYAZIBIwoKcHJvamVjdF9pZBIVQhM1NDU1NjI4NjM0MzQ3NjY1MTg5&filename=&opi=89354086\" -o \"/tmp/splash.html\")",
+      "Bash(curl -s \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sX2UyMjQ5NDg1N2Y4MzQ4Y2E5MjU1MmIxOGFkZjg4ZWI0EgsSBxCm-9ndlRkYAZIBIwoKcHJvamVjdF9pZBIVQhM1NDU1NjI4NjM0MzQ3NjY1MTg5&filename=&opi=89354086\" -o \"/tmp/login.html\")",
+      "Bash(curl -s \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzMyYzk4NmUyYmQzNzQ4MzY5YzRjM2IzYTBlZjU3NGVhEgsSBxCm-9ndlRkYAZIBIwoKcHJvamVjdF9pZBIVQhM1NDU1NjI4NjM0MzQ3NjY1MTg5&filename=&opi=89354086\" -o \"/tmp/register.html\")",
+      "Bash(curl -s \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sX2I0ZmZhOTllMzczMzRlOTdhMTVhNTg1MjU0NmY4YWEyEgsSBxCm-9ndlRkYAZIBIwoKcHJvamVjdF9pZBIVQhM1NDU1NjI4NjM0MzQ3NjY1MTg5&filename=&opi=89354086\" -o \"/tmp/home.html\")",
+      "Bash(flutter analyze *)",
+      "Bash(curl -s \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sX2U3NTc5NWY5MWQzZDQ1ODZiNTNmOTIxOGY3YjdlNjAzEgsSBxCm-9ndlRkYAZIBIwoKcHJvamVjdF9pZBIVQhM1NDU1NjI4NjM0MzQ3NjY1MTg5&filename=&opi=89354086\" -o \"/tmp/cart.html\")",
+      "Bash(curl -s \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sX2EyYzA2YmMzZTBkNjRkYmU5YWM4Yzc2ZDRlMDBmZTAwEgsSBxCm-9ndlRkYAZIBIwoKcHJvamVjdF9pZBIVQhM1NDU1NjI4NjM0MzQ3NjY1MTg5&filename=&opi=89354086\" -o \"/tmp/product_detail.html\")",
+      "Bash(curl -s \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzNkMjFhYjg3ODc1ZjQyMzQ5MTQ0ZTUzZjA0MmYzOTgyEgsSBxCm-9ndlRkYAZIBIwoKcHJvamVjdF9pZBIVQhM1NDU1NjI4NjM0MzQ3NjY1MTg5&filename=&opi=89354086\" -o \"/tmp/checkout.html\")",
+      "Bash(curl -s \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzJhZDI5YTdlZDk0NTQxMTFhNWRmZTA2Y2UyMzEwNmRkEgsSBxCm-9ndlRkYAZIBIwoKcHJvamVjdF9pZBIVQhM1NDU1NjI4NjM0MzQ3NjY1MTg5&filename=&opi=89354086\" -o \"/tmp/order_confirm_v1.html\")",
+      "Bash(curl -s \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzU4NzJmZDU3MzhjNjQwY2M4MGZlZWM5ZTFhYTIyMDU1EgsSBxCm-9ndlRkYAZIBIwoKcHJvamVjdF9pZBIVQhM1NDU1NjI4NjM0MzQ3NjY1MTg5&filename=&opi=89354086\" -o \"/tmp/order_history.html\")",
+      "Bash(curl -s \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sX2I1ODYxMjAwNDExOTRkMDFhOThhNGU3ZWI5ZmQxOWYxEgsSBxCm-9ndlRkYAZIBIwoKcHJvamVjdF9pZBIVQhM1NDU1NjI4NjM0MzQ3NjY1MTg5&filename=&opi=89354086\" -o \"/tmp/profile.html\")",
+      "Bash(curl -s \"https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzgzYTk4ZjE0N2MyZTQyMjI5NmVhYWZjNGViNTk4MTZmEgsSBxCm-9ndlRkYAZIBIwoKcHJvamVjdF9pZBIVQhM1NDU1NjI4NjM0MzQ3NjY1MTg5&filename=&opi=89354086\" -o \"/tmp/order_confirm_v2.html\")",
+      "Bash(xargs grep *)",
+      "mcp__figma__get_design_context",
+      "mcp__figma__get_screenshot",
+      "mcp__figma__whoami",
+      "mcp__figma__get_metadata",
+      "Bash(export PATH=\"$PATH:$HOME/flutter/bin:/c/Users/thasn/flutter/bin:/c/flutter/bin\")"
+    ]
+  }
+}

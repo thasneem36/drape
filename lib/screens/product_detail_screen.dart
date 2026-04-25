@@ -7,12 +7,13 @@ import 'package:provider/provider.dart';
 import '../data/cart_manager.dart';
 import '../data/models.dart';
 import '../data/wishlist_manager.dart';
-import '../theme/tokens.dart';
-import '../theme/typography.dart';
-import '../widgets/buttons.dart';
-import '../widgets/chips.dart';
-import '../widgets/product_art.dart';
-import '../core/routes.dart';
+import '../core/constants/app_colors.dart';
+import '../core/constants/app_text_styles.dart';
+import '../core/constants/app_spacing.dart';
+import '../core/routes/app_routes.dart';
+import '../shared/widgets/primary_button.dart';
+import '../shared/widgets/category_chip.dart';
+import '../shared/widgets/app_local_image.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;

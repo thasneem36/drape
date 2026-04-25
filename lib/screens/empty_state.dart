@@ -3,8 +3,9 @@
 // ─────────────────────────────────────────────────────────────
 
 import 'package:flutter/material.dart';
-import '../theme/tokens.dart';
-import '../theme/typography.dart';
+import '../core/constants/app_colors.dart';
+import '../core/constants/app_text_styles.dart';
+import '../core/constants/app_spacing.dart';
 
 class EmptyState extends StatelessWidget {
   final IconData icon;

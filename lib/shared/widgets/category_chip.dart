@@ -1,10 +1,7 @@
-// ─────────────────────────────────────────────────────────────
-// Chips — pill-style with selectable/solid/outline variants.
-// ─────────────────────────────────────────────────────────────
-
 import 'package:flutter/material.dart';
-import '../theme/tokens.dart';
-import '../theme/typography.dart';
+import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_text_styles.dart';
+import '../../core/constants/app_spacing.dart';
 
 class PillChip extends StatelessWidget {
   final String label;
@@ -15,10 +12,9 @@ class PillChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = selected ? AppColors.ink : Colors.transparent;
-    final fg = selected ? Colors.white : AppColors.ink;
+    final bg     = selected ? AppColors.ink : Colors.transparent;
+    final fg     = selected ? Colors.white : AppColors.ink;
     final border = selected ? AppColors.ink : AppColors.lineStrong;
-
     return Material(
       color: bg,
       shape: StadiumBorder(side: BorderSide(color: border)),
@@ -54,9 +50,7 @@ class SizeChip extends StatelessWidget {
         child: Container(
           width: 52, height: 44,
           alignment: Alignment.center,
-          child: Text(label, style: AppText.label.copyWith(
-            color: selected ? Colors.white : AppColors.ink,
-          )),
+          child: Text(label, style: AppText.label.copyWith(color: selected ? Colors.white : AppColors.ink)),
         ),
       ),
     );
@@ -68,13 +62,7 @@ class ColorSwatch extends StatelessWidget {
   final bool selected;
   final VoidCallback? onTap;
   final double size;
-  const ColorSwatch({
-    super.key,
-    required this.color,
-    this.selected = false,
-    this.onTap,
-    this.size = 36,
-  });
+  const ColorSwatch({super.key, required this.color, this.selected = false, this.onTap, this.size = 36});
 
   @override
   Widget build(BuildContext context) {
@@ -82,20 +70,15 @@ class ColorSwatch extends StatelessWidget {
       behavior: HitTestBehavior.opaque,
       onTap: onTap,
       child: Container(
-        width: size + 6,
-        height: size + 6,
+        width: size + 6, height: size + 6,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(
-            color: selected ? AppColors.ink : AppColors.line,
-            width: selected ? 1.8 : 1,
-          ),
+          border: Border.all(color: selected ? AppColors.ink : AppColors.line, width: selected ? 1.8 : 1),
         ),
         padding: const EdgeInsets.all(3),
         child: Container(
           decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: color,
+            shape: BoxShape.circle, color: color,
             border: Border.all(color: Colors.black.withOpacity(0.08)),
           ),
         ),

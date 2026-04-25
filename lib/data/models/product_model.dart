@@ -1,33 +1,17 @@
-class ProductModel {
-  final String id;
-  final String name;
-  final String brand;
-  final String price;
-  final double priceValue;
-  final String imageUrl;
-  final String category;
-  final String description;
-  final List<String> sizes;
-  final List<String> colors;
+class Product {
+  final String id, name, brand, cat, desc, art;
+  final double price;
+  final List<String> sizes, colors;
   final double rating;
-  final int reviewCount;
-  final bool isNew;
-  final bool isSale;
+  final int reviews;
+  final bool isNew, isSale;
+  final List<int> tint;
 
-  const ProductModel({
-    required this.id,
-    required this.name,
-    required this.brand,
-    required this.price,
-    required this.priceValue,
-    required this.imageUrl,
-    required this.category,
-    required this.description,
-    required this.sizes,
-    required this.colors,
-    required this.rating,
-    required this.reviewCount,
-    this.isNew = false,
-    this.isSale = false,
+  const Product({
+    required this.id, required this.name, required this.brand,
+    required this.price, required this.cat, required this.desc,
+    required this.sizes, required this.colors,
+    required this.rating, required this.reviews, required this.tint,
+    this.art = '', this.isNew = false, this.isSale = false,
   });
 }

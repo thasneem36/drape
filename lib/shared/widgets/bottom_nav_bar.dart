@@ -1,14 +1,11 @@
-// ─────────────────────────────────────────────────────────────
-// Bottom nav tab bar — floating cream pill style.
-// ─────────────────────────────────────────────────────────────
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../data/cart_manager.dart';
-import '../data/wishlist_manager.dart';
-import '../theme/tokens.dart';
-import '../theme/typography.dart';
-import '../core/routes.dart';
+import '../../data/cart_manager.dart';
+import '../../data/wishlist_manager.dart';
+import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_text_styles.dart';
+import '../../core/constants/app_spacing.dart';
+import '../../core/routes/app_routes.dart';
 
 enum TabItem { home, shop, wishlist, cart, profile }
 
@@ -19,7 +16,7 @@ class DrapeBottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = context.watch<CartManager>();
-    final wl = context.watch<WishlistManager>();
+    final wl   = context.watch<WishlistManager>();
 
     final items = [
       (TabItem.home,     Icons.home_outlined,         'HOME',  AppRoutes.home),
@@ -39,21 +36,15 @@ class DrapeBottomNav extends StatelessWidget {
           decoration: BoxDecoration(
             color: const Color(0xFFEBE2D9),
             borderRadius: BorderRadius.circular(32),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.08),
-                blurRadius: 20,
-                offset: const Offset(0, 10),
-              ),
-            ],
+            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 20, offset: const Offset(0, 10))],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: items.map((t) {
               final active = t.$1 == current;
               String? badge;
-              if (t.$1 == TabItem.cart && cart.itemCount > 0) badge = '${cart.itemCount}';
-              if (t.$1 == TabItem.wishlist && wl.count > 0) badge = '${wl.count}';
+              if (t.$1 == TabItem.cart     && cart.itemCount > 0) badge = '${cart.itemCount}';
+              if (t.$1 == TabItem.wishlist && wl.count > 0)       badge = '${wl.count}';
 
               return Expanded(
                 child: GestureDetector(
@@ -71,11 +62,7 @@ class DrapeBottomNav extends StatelessWidget {
                           clipBehavior: Clip.none,
                           alignment: Alignment.center,
                           children: [
-                            Icon(
-                              t.$2,
-                              size: 24,
-                              color: active ? AppColors.ink : AppColors.ink.withOpacity(0.5),
-                            ),
+                            Icon(t.$2, size: 24, color: active ? AppColors.ink : AppColors.ink.withOpacity(0.5)),
                             if (badge != null)
                               Positioned(
                                 top: -4, right: -6,
@@ -88,34 +75,24 @@ class DrapeBottomNav extends StatelessWidget {
                                     border: Border.all(color: const Color(0xFFEBE2D9), width: 1.5),
                                   ),
                                   alignment: Alignment.center,
-                                  child: Text(badge,
-                                      style: AppText.micro.copyWith(
-                                        color: Colors.white,
-                                        fontSize: 9,
-                                        fontWeight: FontWeight.bold,
-                                      )),
+                                  child: Text(badge, style: AppText.micro.copyWith(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
                                 ),
                               ),
                           ],
                         ),
                       ),
                       const SizedBox(height: 2),
-                      Text(t.$3,
-                          style: AppText.micro.copyWith(
-                            color: active ? AppColors.ink : AppColors.ink.withOpacity(0.5),
-                            fontSize: 9,
-                            fontWeight: active ? FontWeight.w800 : FontWeight.w600,
-                            letterSpacing: 0.5,
-                          )),
+                      Text(t.$3, style: AppText.micro.copyWith(
+                        color: active ? AppColors.ink : AppColors.ink.withOpacity(0.5),
+                        fontSize: 9,
+                        fontWeight: active ? FontWeight.w800 : FontWeight.w600,
+                        letterSpacing: 0.5,
+                      )),
                       if (active)
                         Container(
                           margin: const EdgeInsets.only(top: 2),
-                          width: 4,
-                          height: 4,
-                          decoration: const BoxDecoration(
-                            color: AppColors.accent,
-                            shape: BoxShape.circle,
-                          ),
+                          width: 4, height: 4,
+                          decoration: const BoxDecoration(color: AppColors.accent, shape: BoxShape.circle),
                         )
                       else
                         const SizedBox(height: 6),

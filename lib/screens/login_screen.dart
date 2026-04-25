@@ -3,10 +3,11 @@
 // ─────────────────────────────────────────────────────────────
 
 import 'package:flutter/material.dart';
-import '../theme/tokens.dart';
-import '../theme/typography.dart';
-import '../widgets/buttons.dart';
-import '../core/routes.dart';
+import '../core/constants/app_colors.dart';
+import '../core/constants/app_text_styles.dart';
+import '../core/constants/app_spacing.dart';
+import '../core/routes/app_routes.dart';
+import '../shared/widgets/primary_button.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

@@ -1,86 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'app_colors.dart';
 
-// All letter-spacing values are converted from em to logical pixels:
-//   letterSpacingPx = em * fontSize
+class AppText {
+  AppText._();
 
-class AppTextStyles {
-  AppTextStyles._();
+  static TextStyle _serif(double size, {FontWeight w = FontWeight.w500, double h = 1.1, double ls = -0.02, bool italic = true}) =>
+      GoogleFonts.fraunces(fontSize: size, fontWeight: w, height: h, letterSpacing: size * ls,
+          fontStyle: italic ? FontStyle.italic : FontStyle.normal, color: AppColors.textPrimary);
 
-  // ── Display — Fraunces italic ────────────────────────────────
-  static TextStyle displayXL = GoogleFonts.fraunces(
-    fontSize: 48, height: 1.02, fontWeight: FontWeight.w400,
-    fontStyle: FontStyle.italic, letterSpacing: -1.44,
-  );
-  static TextStyle displayL = GoogleFonts.fraunces(
-    fontSize: 40, height: 1.05, fontWeight: FontWeight.w500,
-    fontStyle: FontStyle.italic, letterSpacing: -1.20,
-  );
-  static TextStyle displayM = GoogleFonts.fraunces(
-    fontSize: 36, height: 1.00, fontWeight: FontWeight.w500,
-    fontStyle: FontStyle.italic, letterSpacing: -0.72,
-  );
-  static TextStyle displayS = GoogleFonts.fraunces(
-    fontSize: 34, height: 1.10, fontWeight: FontWeight.w500,
-    fontStyle: FontStyle.italic, letterSpacing: -0.68,
-  );
+  static TextStyle _sans(double size, {FontWeight w = FontWeight.w400, double h = 1.5, double ls = 0}) =>
+      GoogleFonts.inter(fontSize: size, fontWeight: w, height: h, letterSpacing: ls, color: AppColors.textPrimary);
 
-  // ── Title — Fraunces italic ──────────────────────────────────
-  static TextStyle titleXL = GoogleFonts.fraunces(
-    fontSize: 30, height: 1.10, fontWeight: FontWeight.w500,
-    fontStyle: FontStyle.italic, letterSpacing: -0.60,
-  );
-  static TextStyle titleL = GoogleFonts.fraunces(
-    fontSize: 26, height: 1.15, fontWeight: FontWeight.w500,
-    fontStyle: FontStyle.italic, letterSpacing: -0.52,
-  );
-  static TextStyle titleM = GoogleFonts.fraunces(
-    fontSize: 22, height: 1.20, fontWeight: FontWeight.w500,
-    fontStyle: FontStyle.italic, letterSpacing: -0.22,
-  );
-  static TextStyle titleS = GoogleFonts.fraunces(
-    fontSize: 18, height: 1.30, fontWeight: FontWeight.w600,
-    letterSpacing: -0.18,
-  );
+  static TextStyle _mono(double size, {FontWeight w = FontWeight.w500, double ls = 0.1}) =>
+      GoogleFonts.jetBrainsMono(fontSize: size, fontWeight: w, letterSpacing: size * ls, color: AppColors.textPrimary);
 
-  // ── Body — Inter ─────────────────────────────────────────────
-  static TextStyle bodyL = GoogleFonts.inter(
-    fontSize: 15, height: 1.55, fontWeight: FontWeight.w500,
-    letterSpacing: -0.15,
-  );
-  static TextStyle bodyM = GoogleFonts.inter(
-    fontSize: 14, height: 1.60, fontWeight: FontWeight.w400,
-  );
-  static TextStyle bodyS = GoogleFonts.inter(
-    fontSize: 13, height: 1.55, fontWeight: FontWeight.w400,
-  );
-  static TextStyle caption = GoogleFonts.inter(
-    fontSize: 12, height: 1.40, fontWeight: FontWeight.w500,
-  );
-
-  // ── Utility — Inter uppercase ────────────────────────────────
-  static TextStyle label = GoogleFonts.inter(
-    fontSize: 11, height: 1.30, fontWeight: FontWeight.w600,
-    letterSpacing: 1.54,
-  );
-  static TextStyle eyebrow = GoogleFonts.inter(
-    fontSize: 10, height: 1.20, fontWeight: FontWeight.w600,
-    letterSpacing: 2.20,
-  );
-  static TextStyle micro = GoogleFonts.inter(
-    fontSize: 9, height: 1.20, fontWeight: FontWeight.w700,
-    letterSpacing: 1.80,
-  );
-
-  // ── Mono — JetBrains Mono ────────────────────────────────────
-  static TextStyle mono = GoogleFonts.jetBrainsMono(
-    fontSize: 10, height: 1.20, fontWeight: FontWeight.w500,
-    letterSpacing: 1.00,
-  );
-
-  // ── Aliases used by lib/screens/** ──────────────────────
-  static TextStyle productName = GoogleFonts.fraunces(
-    fontSize: 15, height: 1.30, fontWeight: FontWeight.w500,
-    letterSpacing: -0.15,
-  );
+  static TextStyle get displayXL  => _serif(48, w: FontWeight.w400, h: 1.02, ls: -0.03);
+  static TextStyle get displayL   => _serif(40, h: 1.05, ls: -0.03);
+  static TextStyle get displayM   => _serif(36, h: 1.00);
+  static TextStyle get displayS   => _serif(34, h: 1.10);
+  static TextStyle get titleXL    => _serif(30, h: 1.10);
+  static TextStyle get titleL     => _serif(26, h: 1.15);
+  static TextStyle get titleM     => _serif(22, h: 1.20, ls: -0.01);
+  static TextStyle get titleS     => _serif(18, w: FontWeight.w600, h: 1.30, ls: -0.01, italic: false);
+  static TextStyle get productName => _serif(15, w: FontWeight.w500, h: 1.25, ls: -0.01, italic: false);
+  static TextStyle get bodyL      => _sans(15, w: FontWeight.w500, h: 1.55);
+  static TextStyle get bodyM      => _sans(14, h: 1.60);
+  static TextStyle get bodyS      => _sans(13, h: 1.55);
+  static TextStyle get caption    => _sans(12, w: FontWeight.w500, h: 1.40);
+  static TextStyle get label      => _sans(11, w: FontWeight.w600, h: 1.30, ls: 1.54);
+  static TextStyle get eyebrow    => _sans(10, w: FontWeight.w600, h: 1.20, ls: 2.2).copyWith(color: AppColors.muted);
+  static TextStyle get micro      => _sans(9,  w: FontWeight.w700, h: 1.20, ls: 1.8);
+  static TextStyle get mono       => _mono(10);
 }
+
+typedef AppTextStyles = AppText;

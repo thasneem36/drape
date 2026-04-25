@@ -1,10 +1,7 @@
-// ─────────────────────────────────────────────────────────────
-// Primary + secondary buttons matching the prototype.
-// ─────────────────────────────────────────────────────────────
-
 import 'package:flutter/material.dart';
-import '../theme/tokens.dart';
-import '../theme/typography.dart';
+import '../../core/constants/app_colors.dart';
+import '../../core/constants/app_text_styles.dart';
+import '../../core/constants/app_spacing.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String label;
@@ -12,20 +9,12 @@ class PrimaryButton extends StatelessWidget {
   final IconData? icon;
   final bool expanded;
   final bool dark;
-  const PrimaryButton({
-    super.key,
-    required this.label,
-    this.onTap,
-    this.icon,
-    this.expanded = true,
-    this.dark = true,
-  });
+  const PrimaryButton({super.key, required this.label, this.onTap, this.icon, this.expanded = true, this.dark = true});
 
   @override
   Widget build(BuildContext context) {
     final bg = dark ? AppColors.ink : AppColors.surface;
     final fg = dark ? Colors.white : AppColors.ink;
-
     final child = Material(
       color: bg,
       borderRadius: BorderRadius.circular(AppRadius.base),
@@ -44,16 +33,12 @@ class PrimaryButton extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(label, style: AppText.label.copyWith(color: fg)),
-              if (icon != null) ...[
-                const SizedBox(width: 10),
-                Icon(icon, color: fg, size: 16),
-              ],
+              if (icon != null) ...[const SizedBox(width: 10), Icon(icon, color: fg, size: 16)],
             ],
           ),
         ),
       ),
     );
-
     return expanded ? SizedBox(width: double.infinity, child: child) : child;
   }
 }
@@ -63,13 +48,7 @@ class GhostButton extends StatelessWidget {
   final IconData? icon;
   final VoidCallback? onTap;
   final bool expanded;
-  const GhostButton({
-    super.key,
-    required this.label,
-    this.icon,
-    this.onTap,
-    this.expanded = true,
-  });
+  const GhostButton({super.key, required this.label, this.icon, this.onTap, this.expanded = true});
 
   @override
   Widget build(BuildContext context) {
@@ -89,10 +68,7 @@ class GhostButton extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                if (icon != null) ...[
-                  Icon(icon, size: 16, color: AppColors.ink),
-                  const SizedBox(width: 10),
-                ],
+                if (icon != null) ...[Icon(icon, size: 16, color: AppColors.ink), const SizedBox(width: 10)],
                 Text(label, style: AppText.label),
               ],
             ),
@@ -111,21 +87,12 @@ class IconPill extends StatelessWidget {
   final Color? fg;
   final double size;
   final String? badge;
-  const IconPill({
-    super.key,
-    required this.icon,
-    this.onTap,
-    this.bg,
-    this.fg,
-    this.size = 44,
-    this.badge,
-  });
+  const IconPill({super.key, required this.icon, this.onTap, this.bg, this.fg, this.size = 44, this.badge});
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: size,
-      height: size,
+      width: size, height: size,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -138,31 +105,22 @@ class IconPill extends StatelessWidget {
             child: InkWell(
               customBorder: const CircleBorder(),
               onTap: onTap,
-              child: Icon(icon, size: 20, color: fg ?? AppColors.ink),
+              child: Icon(icon, size: 18, color: fg ?? AppColors.ink),
             ),
           ),
           if (badge != null)
             Positioned(
-              top: -2,
-              right: -2,
+              top: -2, right: -2,
               child: Container(
                 constraints: const BoxConstraints(minWidth: 18, minHeight: 18),
                 padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
                 decoration: BoxDecoration(
-                  color:
-                      AppColors.inkSoft, // Dark brown color to match the design
+                  color: AppColors.accent,
                   borderRadius: BorderRadius.circular(AppRadius.pill),
-                  border: Border.all(color: Colors.white, width: 2.0),
+                  border: Border.all(color: AppColors.surface, width: 1.5),
                 ),
                 alignment: Alignment.center,
-                child: Text(
-                  badge!,
-                  style: AppText.micro.copyWith(
-                    color: Colors.white,
-                    fontSize: 9,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                child: Text(badge!, style: AppText.micro.copyWith(color: Colors.white, fontSize: 9)),
               ),
             ),
         ],

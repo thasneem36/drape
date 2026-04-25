@@ -5,14 +5,15 @@
 import 'package:flutter/material.dart';
 import '../data/dummy_data.dart';
 import '../data/models.dart';
-import '../theme/tokens.dart';
-import '../theme/typography.dart';
-import '../widgets/bottom_nav.dart';
-import '../widgets/buttons.dart';
-import '../widgets/chips.dart';
-import '../widgets/product_card.dart';
-import '../widgets/scaffold.dart';
-import '../core/routes.dart';
+import '../core/constants/app_colors.dart';
+import '../core/constants/app_text_styles.dart';
+import '../core/constants/app_spacing.dart';
+import '../core/routes/app_routes.dart';
+import '../shared/widgets/bottom_nav_bar.dart';
+import '../shared/widgets/primary_button.dart';
+import '../shared/widgets/category_chip.dart';
+import '../shared/widgets/product_card.dart';
+import '../shared/widgets/drape_scaffold.dart';
 
 class ProductListScreen extends StatefulWidget {
   const ProductListScreen({super.key});

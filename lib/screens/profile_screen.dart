@@ -6,11 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../data/dummy_data.dart';
 import '../data/wishlist_manager.dart';
-import '../theme/tokens.dart';
-import '../theme/typography.dart';
-import '../widgets/bottom_nav.dart';
-import '../widgets/scaffold.dart';
-import '../core/routes.dart';
+import '../core/constants/app_colors.dart';
+import '../core/constants/app_text_styles.dart';
+import '../core/constants/app_spacing.dart';
+import '../core/routes/app_routes.dart';
+import '../shared/widgets/bottom_nav_bar.dart';
+import '../shared/widgets/drape_scaffold.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});

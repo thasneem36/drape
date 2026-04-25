@@ -21,7 +21,8 @@
       "mcp__figma__get_screenshot",
       "mcp__figma__whoami",
       "mcp__figma__get_metadata",
-      "Bash(export PATH=\"$PATH:$HOME/flutter/bin:/c/Users/thasn/flutter/bin:/c/flutter/bin\")"
+      "Bash(export PATH=\"$PATH:$HOME/flutter/bin:/c/Users/thasn/flutter/bin:/c/flutter/bin\")",
+      "Bash(gh pr create --title 'Restructure: consolidate routes, move theme & widgets to new folder layout' --body ' *)"
     ]
   }
 }

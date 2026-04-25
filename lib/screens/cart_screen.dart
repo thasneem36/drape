@@ -236,10 +236,10 @@ class _CartRow extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 4),
                 Wrap(
                   spacing: 8,
-                  runSpacing: 6,
+                  runSpacing: 4,
                   children: [
                     _Badge(label: 'Size ${item.size}'),
                     _Badge(
@@ -248,7 +248,7 @@ class _CartRow extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 6),
                 Row(
                   children: [
                     Container(

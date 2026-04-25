@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../data/models.dart';
-import '../../core/constants/app_colors.dart';
 import '../../core/constants/app_spacing.dart';
 
 class ProductArt extends StatelessWidget {
@@ -31,7 +30,7 @@ class ProductArt extends StatelessWidget {
           DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors: [Colors.white.withOpacity(0.06), Colors.transparent, Colors.black.withOpacity(0.14)],
+                colors: [Colors.white.withValues(alpha: 0.06), Colors.transparent, Colors.black.withValues(alpha: 0.14)],
                 begin: Alignment.topLeft, end: Alignment.bottomRight, stops: const [0, 0.55, 1],
               ),
             ),
@@ -44,7 +43,7 @@ class ProductArt extends StatelessWidget {
                 child: Text(
                   (product.art.isEmpty ? product.name : product.art).toLowerCase(),
                   style: GoogleFonts.fraunces(
-                    fontStyle: FontStyle.italic, color: Colors.white.withOpacity(0.85),
+                    fontStyle: FontStyle.italic, color: Colors.white.withValues(alpha: 0.85),
                     fontSize: fs, fontWeight: FontWeight.w400, height: 1.1, letterSpacing: -0.3,
                   ),
                 ),

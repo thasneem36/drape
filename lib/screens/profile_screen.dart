@@ -8,7 +8,6 @@ import '../data/dummy_data.dart';
 import '../data/wishlist_manager.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
-import '../core/constants/app_spacing.dart';
 import '../core/routes/app_routes.dart';
 import '../shared/widgets/bottom_nav_bar.dart';
 import '../shared/widgets/drape_scaffold.dart';
@@ -72,7 +71,7 @@ class ProfileScreen extends StatelessWidget {
                       width: 140, height: 140,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white.withOpacity(0.06), width: 1),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.06), width: 1),
                       ),
                     ),
                   ),
@@ -82,7 +81,7 @@ class ProfileScreen extends StatelessWidget {
                       width: 80, height: 80,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white.withOpacity(0.04), width: 1),
+                        border: Border.all(color: Colors.white.withValues(alpha: 0.04), width: 1),
                       ),
                     ),
                   ),
@@ -127,7 +126,7 @@ class ProfileScreen extends StatelessWidget {
                                   const SizedBox(height: 2),
                                   Text(u.email,
                                       style: AppText.caption.copyWith(
-                                          color: Colors.white.withOpacity(0.5))),
+                                          color: Colors.white.withValues(alpha: 0.5))),
                                 ],
                               ),
                             ),
@@ -252,7 +251,7 @@ class _StatBox extends StatelessWidget {
             const SizedBox(height: 2),
             Text(label,
                 style: AppText.micro.copyWith(
-                    color: Colors.white.withOpacity(0.45), letterSpacing: 1.2, fontSize: 9)),
+                    color: Colors.white.withValues(alpha: 0.45), letterSpacing: 1.2, fontSize: 9)),
           ]),
         ),
       );
@@ -261,7 +260,7 @@ class _StatBox extends StatelessWidget {
 class _Divider extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
-        width: 1, color: Colors.white.withOpacity(0.08));
+        width: 1, color: Colors.white.withValues(alpha: 0.08));
 }
 
 class _SectionLabel extends StatelessWidget {

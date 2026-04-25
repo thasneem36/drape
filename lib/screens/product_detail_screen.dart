@@ -10,7 +10,6 @@ import '../data/wishlist_manager.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/constants/app_spacing.dart';
-import '../core/routes/app_routes.dart';
 import '../shared/widgets/primary_button.dart';
 import '../shared/widgets/category_chip.dart';
 import '../shared/widgets/app_local_image.dart';
@@ -62,7 +61,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: Container(
                         width: 44, height: 44,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.85),
+                          color: Colors.white.withValues(alpha: 0.85),
                           shape: BoxShape.circle,
                           boxShadow: const [BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 2))],
                         ),
@@ -75,7 +74,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: Container(
                         width: 44, height: 44,
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.85),
+                          color: Colors.white.withValues(alpha: 0.85),
                           shape: BoxShape.circle,
                           boxShadow: const [BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 2))],
                         ),
@@ -109,7 +108,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       child: Container(
                         width: 44, height: 4,
                         decoration: BoxDecoration(
-                          color: Colors.black.withOpacity(0.12),
+                          color: Colors.black.withValues(alpha: 0.12),
                           borderRadius: BorderRadius.circular(2),
                         ),
                       ),
@@ -167,7 +166,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return Row(mainAxisSize: MainAxisSize.min, children: List.generate(5, (i) {
       return Icon(Icons.star,
           size: 13,
-          color: i < rating.floor() ? AppColors.accent : Colors.black.withOpacity(0.15));
+          color: i < rating.floor() ? AppColors.accent : Colors.black.withValues(alpha: 0.15));
     }));
   }
 
@@ -265,7 +264,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           Container(
             width: 40, height: 40,
             decoration: BoxDecoration(
-              color: AppColors.ink.withOpacity(0.06),
+              color: AppColors.ink.withValues(alpha: 0.06),
               borderRadius: BorderRadius.circular(AppRadius.pill),
             ),
             child: const Icon(Icons.local_shipping_outlined, size: 18),

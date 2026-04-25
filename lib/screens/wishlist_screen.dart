@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../data/dummy_data.dart';
 import '../data/wishlist_manager.dart';
-import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/routes/app_routes.dart';
 import '../shared/widgets/bottom_nav_bar.dart';

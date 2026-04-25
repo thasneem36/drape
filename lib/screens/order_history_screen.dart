@@ -43,7 +43,7 @@ class OrderHistoryScreen extends StatelessWidget {
             child: ListView.separated(
               padding: const EdgeInsets.fromLTRB(18, 4, 18, 120),
               itemCount: orders.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (_, i) {
                 final o = orders[i];
                 final statusColor = switch (o.status) {

@@ -66,7 +66,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    SizedBox(width: 290, child: Text(s.sub, style: AppText.bodyM.copyWith(color: Colors.white.withOpacity(0.78)))),
+                    SizedBox(width: 290, child: Text(s.sub, style: AppText.bodyM.copyWith(color: Colors.white.withValues(alpha: 0.78)))),
                     const SizedBox(height: 60),
                     Row(children: List.generate(slides.length, (i) {
                       return Expanded(child: GestureDetector(
@@ -75,7 +75,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           margin: const EdgeInsets.symmetric(horizontal: 3),
                           height: 3,
                           decoration: BoxDecoration(
-                            color: i <= step ? Colors.white.withOpacity(0.9) : Colors.white24,
+                            color: i <= step ? Colors.white.withValues(alpha: 0.9) : Colors.white24,
                             borderRadius: BorderRadius.circular(2),
                           ),
                         ),
@@ -108,7 +108,7 @@ Widget _onbBtn(String label, {VoidCallback? onTap, bool outlined = false}) {
     color: outlined ? Colors.transparent : Colors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(AppRadius.base),
-      side: outlined ? BorderSide(color: Colors.white.withOpacity(0.3)) : BorderSide.none,
+      side: outlined ? BorderSide(color: Colors.white.withValues(alpha: 0.3)) : BorderSide.none,
     ),
     child: InkWell(
       borderRadius: BorderRadius.circular(AppRadius.base),
@@ -129,7 +129,7 @@ class _Ring extends StatelessWidget {
         width: size, height: size,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          border: Border.all(color: const Color(0xFFE8D7C4).withOpacity(alpha), width: 1.5),
+          border: Border.all(color: const Color(0xFFE8D7C4).withValues(alpha: alpha), width: 1.5),
         ),
       );
 }

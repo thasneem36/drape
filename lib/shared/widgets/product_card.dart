@@ -84,7 +84,7 @@ class _HeartBtn extends StatelessWidget {
   const _HeartBtn({required this.active, required this.onTap});
   @override
   Widget build(BuildContext context) => Material(
-        color: Colors.white.withOpacity(0.92),
+        color: Colors.white.withValues(alpha: 0.92),
         shape: const CircleBorder(),
         child: InkWell(
           customBorder: const CircleBorder(),

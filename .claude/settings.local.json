@@ -22,7 +22,23 @@
       "mcp__figma__whoami",
       "mcp__figma__get_metadata",
       "Bash(export PATH=\"$PATH:$HOME/flutter/bin:/c/Users/thasn/flutter/bin:/c/flutter/bin\")",
-      "Bash(gh pr create --title 'Restructure: consolidate routes, move theme & widgets to new folder layout' --body ' *)"
+      "Bash(gh pr create --title 'Restructure: consolidate routes, move theme & widgets to new folder layout' --body ' *)",
+      "Bash(grep -rn \"from '../theme/\\\\|from '../widgets/\\\\|'../theme/\\\\|'../widgets/\" lib/)",
+      "Bash(grep -rn \"import.*theme/\\\\|import.*widgets/\" lib/screens/ lib/shared/ lib/data/ lib/core/ lib/app.dart lib/main.dart)",
+      "Bash(ls assets/)",
+      "Bash(ls assets/images/)",
+      "Bash(flutter clean *)",
+      "Bash(sed -i \"/import '..\\\\/core\\\\/constants\\\\/app_spacing.dart';/d\" lib/screens/checkout_screen.dart lib/screens/empty_state.dart lib/screens/profile_screen.dart)",
+      "Bash(sed -i \"/import '..\\\\/core\\\\/constants\\\\/app_spacing.dart';/d\" lib/screens/product_list_screen.dart)",
+      "Bash(sed -i \"/import '..\\\\/shared\\\\/widgets\\\\/primary_button.dart';/d\" lib/screens/home_screen.dart lib/screens/product_list_screen.dart)",
+      "Bash(sed -i \"/import '..\\\\/shared\\\\/widgets\\\\/app_local_image.dart';/d\" lib/screens/home_screen.dart)",
+      "Bash(sed -i \"/import '..\\\\/core\\\\/routes\\\\/app_routes.dart';/d\" lib/screens/product_detail_screen.dart)",
+      "Bash(powershell -Command ' *)",
+      "Bash(sed -n '46,50p' lib/core/routes/app_routes.dart)",
+      "Bash(sed -n '330,335p' lib/screens/home_screen.dart)",
+      "Bash(sed -n '389,394p' lib/screens/home_screen.dart)",
+      "Bash(sed -n '43,48p' lib/screens/order_history_screen.dart)",
+      "Bash(sed -n '166,172p' lib/screens/product_list_screen.dart)"
     ]
   }
 }

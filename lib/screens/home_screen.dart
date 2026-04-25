@@ -15,9 +15,7 @@ import '../core/constants/app_text_styles.dart';
 import '../core/constants/app_spacing.dart';
 import '../core/routes/app_routes.dart';
 import '../shared/widgets/bottom_nav_bar.dart';
-import '../shared/widgets/primary_button.dart';
 import '../shared/widgets/category_chip.dart';
-import '../shared/widgets/app_local_image.dart';
 import '../shared/widgets/product_card.dart';
 import '../shared/widgets/drape_scaffold.dart';
 
@@ -332,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: DummyData.categories.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 8),
+            separatorBuilder: (_, _) => const SizedBox(width: 8),
             itemBuilder: (_, i) => PillChip(
               label: DummyData.categories[i].name,
               selected: i == cat,
@@ -391,7 +389,7 @@ class _HomeScreenState extends State<HomeScreen> {
               scrollDirection: Axis.horizontal,
               padding: const EdgeInsets.symmetric(horizontal: 18),
               itemCount: featured.length,
-              separatorBuilder: (_, __) => const SizedBox(width: 14),
+              separatorBuilder: (_, _) => const SizedBox(width: 14),
               itemBuilder: (_, i) => SizedBox(
                 width: 220,
                 child: ProductCard(
@@ -459,7 +457,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     vertical: 9,
                   ),
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white.withOpacity(0.4)),
+                    border: Border.all(color: Colors.white.withValues(alpha: 0.4)),
                     borderRadius: BorderRadius.circular(AppRadius.pill),
                   ),
                   child: Text(
@@ -527,7 +525,7 @@ class _Ring extends StatelessWidget {
     height: size,
     decoration: BoxDecoration(
       shape: BoxShape.circle,
-      border: Border.all(color: color.withOpacity(alpha), width: 1.5),
+      border: Border.all(color: color.withValues(alpha: alpha), width: 1.5),
     ),
   );
 }

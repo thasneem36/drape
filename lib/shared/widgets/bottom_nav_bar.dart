@@ -36,7 +36,7 @@ class DrapeBottomNav extends StatelessWidget {
           decoration: BoxDecoration(
             color: const Color(0xFFEBE2D9),
             borderRadius: BorderRadius.circular(32),
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 20, offset: const Offset(0, 10))],
+            boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.08), blurRadius: 20, offset: const Offset(0, 10))],
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -62,7 +62,7 @@ class DrapeBottomNav extends StatelessWidget {
                           clipBehavior: Clip.none,
                           alignment: Alignment.center,
                           children: [
-                            Icon(t.$2, size: 24, color: active ? AppColors.ink : AppColors.ink.withOpacity(0.5)),
+                            Icon(t.$2, size: 24, color: active ? AppColors.ink : AppColors.ink.withValues(alpha: 0.5)),
                             if (badge != null)
                               Positioned(
                                 top: -4, right: -6,
@@ -83,7 +83,7 @@ class DrapeBottomNav extends StatelessWidget {
                       ),
                       const SizedBox(height: 2),
                       Text(t.$3, style: AppText.micro.copyWith(
-                        color: active ? AppColors.ink : AppColors.ink.withOpacity(0.5),
+                        color: active ? AppColors.ink : AppColors.ink.withValues(alpha: 0.5),
                         fontSize: 9,
                         fontWeight: active ? FontWeight.w800 : FontWeight.w600,
                         letterSpacing: 0.5,

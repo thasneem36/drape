@@ -7,10 +7,8 @@ import '../data/dummy_data.dart';
 import '../data/models.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
-import '../core/constants/app_spacing.dart';
 import '../core/routes/app_routes.dart';
 import '../shared/widgets/bottom_nav_bar.dart';
-import '../shared/widgets/primary_button.dart';
 import '../shared/widgets/category_chip.dart';
 import '../shared/widgets/product_card.dart';
 import '../shared/widgets/drape_scaffold.dart';
@@ -25,9 +23,24 @@ class _ProductListScreenState extends State<ProductListScreen> {
   int filter = 0;
   final filters = const ['All Items', 'Silk', 'Cashmere', 'Linen', 'Wool'];
 
+  // ── Category filter state ────────────────────────────────
+  String selectedCategory = 'All';
+
+  List<Product> get _filteredProducts {
+    if (selectedCategory == 'All' || selectedCategory == 'All Items') {
+      return DummyData.products;
+    }
+    return DummyData.products
+        .where((p) =>
+            p.cat.toLowerCase().contains(selectedCategory.toLowerCase()) ||
+            p.name.toLowerCase().contains(selectedCategory.toLowerCase()) ||
+            p.desc.toLowerCase().contains(selectedCategory.toLowerCase()))
+        .toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final products = DummyData.products;
+    final products = _filteredProducts;
     void openPdp(Product p) => Navigator.pushNamed(context, AppRoutes.pdp, arguments: p);
 
     return DrapeScaffold(
@@ -73,27 +86,43 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 SliverToBoxAdapter(child: _title()),
                 SliverToBoxAdapter(child: _filterChips()),
                 SliverToBoxAdapter(child: _countRow(products.length)),
-                SliverPadding(
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 30),
-                  sliver: SliverGrid(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 14,
-                      mainAxisSpacing: 20,
-                      childAspectRatio: 0.58,
+                if (products.isEmpty)
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Center(
+                      child: Text(
+                        'No products found',
+                        style: TextStyle(
+                          fontFamily: 'Inter',
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400,
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
                     ),
-                    delegate: SliverChildBuilderDelegate(
-                      (ctx, i) {
-                        final p = products[i];
-                        return Padding(
-                          padding: EdgeInsets.only(top: i % 2 == 1 ? 24 : 0),
-                          child: ProductCard(product: p, onTap: () => openPdp(p), compact: true),
-                        );
-                      },
-                      childCount: products.length,
+                  )
+                else
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 120),
+                    sliver: SliverGrid(
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 14,
+                        mainAxisSpacing: 20,
+                        childAspectRatio: 0.58,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        (ctx, i) {
+                          final p = products[i];
+                          return Padding(
+                            padding: EdgeInsets.only(top: i % 2 == 1 ? 24 : 0),
+                            child: ProductCard(product: p, onTap: () => openPdp(p), compact: true),
+                          );
+                        },
+                        childCount: products.length,
+                      ),
                     ),
                   ),
-                ),
               ],
             ),
           ),
@@ -137,12 +166,15 @@ class _ProductListScreenState extends State<ProductListScreen> {
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 20),
           itemCount: filters.length,
-          separatorBuilder: (_, __) => const SizedBox(width: 8),
+          separatorBuilder: (_, _) => const SizedBox(width: 8),
           itemBuilder: (_, i) => PillChip(
             label: filters[i],
             selected: i == filter,
             dense: true,
-            onTap: () => setState(() => filter = i),
+            onTap: () => setState(() {
+              filter = i;
+              selectedCategory = i == 0 ? 'All' : filters[i];
+            }),
           ),
         ),
       );

@@ -23,7 +23,7 @@ void main() async {
   );
 
   // Seed Firestore with any new products from seed_data.json.
-  // Only adds items that don't already exist — safe to run every start.
+  // Also patches imageUrl when it changes (e.g. dead Unsplash links).
   await SeedService.run();
 
   // Dismiss the native splash — Flutter is ready.

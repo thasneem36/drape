@@ -66,10 +66,11 @@ class SeedService {
       if (!existingById.containsKey(id)) {
         toCreate.add(item);
       } else {
-        // Doc already exists — patch imageUrl if it was empty.
+        // Doc already exists — patch imageUrl if seed has one and it
+        // differs from what's live (handles empty OR changed/broken URLs).
         final seedUrl  = (item['imageUrl'] as String?) ?? '';
         final liveUrl  = (existingById[id]!['imageUrl'] as String?) ?? '';
-        if (seedUrl.isNotEmpty && liveUrl.isEmpty) {
+        if (seedUrl.isNotEmpty && seedUrl != liveUrl) {
           toPatch.add(item);
         }
       }

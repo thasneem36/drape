@@ -313,34 +313,32 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: const EdgeInsets.all(22),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text(
                     o.eyebrow.toUpperCase(),
                     style: AppText.eyebrow.copyWith(color: o.accent),
                   ),
                   const SizedBox(height: 8),
-                  SizedBox(
-                    width: 220,
-                    child: Text(
-                      o.title,
-                      style: AppText.titleXL.copyWith(
-                        color: Colors.white,
-                        fontStyle: FontStyle.italic,
-                      ),
+                  Text(
+                    o.title,
+                    style: AppText.titleXL.copyWith(
+                      color: Colors.white,
+                      fontStyle: FontStyle.italic,
                     ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 6),
-                  SizedBox(
-                    width: 220,
-                    child: Text(
-                      o.sub,
-                      style:
-                          AppText.bodyS.copyWith(color: Colors.white70),
-                    ),
+                  Text(
+                    o.sub,
+                    style: AppText.bodyS.copyWith(color: Colors.white70),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const Spacer(),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Material(
                         color: Colors.white,
@@ -366,13 +364,11 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         ),
                       ),
-                      const Spacer(),
                       Row(
-                        children:
-                            List.generate(_offers.length, (i) {
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(_offers.length, (i) {
                           return AnimatedContainer(
-                            duration:
-                                const Duration(milliseconds: 300),
+                            duration: const Duration(milliseconds: 300),
                             margin: const EdgeInsets.only(left: 6),
                             height: 6,
                             width: i == offer ? 22 : 6,

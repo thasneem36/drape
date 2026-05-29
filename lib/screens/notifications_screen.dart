@@ -1,22 +1,19 @@
 // ─────────────────────────────────────────────────────────────
 // Notifications screen — toggle push-notification preferences.
-// Preferences are stored in users/{uid}.notifPrefs in Firestore.
+// State is owned by NotificationPrefsManager (Provider) so the
+// home-screen bell icon stays in sync automatically.
 // ─────────────────────────────────────────────────────────────
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../data/notification_prefs_manager.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/constants/app_spacing.dart';
 
-class NotificationsScreen extends StatefulWidget {
+class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
-  @override
-  State<NotificationsScreen> createState() => _NotificationsScreenState();
-}
 
-class _NotificationsScreenState extends State<NotificationsScreen> {
   static const _keys = [
     'orderUpdates',
     'newArrivals',
@@ -38,55 +35,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     'wishlistAlerts': 'Price drops on saved items',
   };
 
-  final Map<String, bool> _prefs = {
-    for (final k in _keys) k: true,
-  };
-
-  bool _loading = true;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadPrefs();
-  }
-
-  Future<void> _loadPrefs() async {
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    if (uid == null) {
-      setState(() => _loading = false);
-      return;
-    }
-    try {
-      final doc = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .get();
-      if (doc.exists) {
-        final raw =
-            (doc.data()?['notifPrefs'] as Map<String, dynamic>?) ?? {};
-        for (final k in _keys) {
-          if (raw.containsKey(k)) _prefs[k] = (raw[k] as bool?) ?? true;
-        }
-      }
-    } catch (_) {}
-    if (mounted) setState(() => _loading = false);
-  }
-
-  Future<void> _toggle(String key, bool val) async {
-    setState(() => _prefs[key] = val);
-    final uid = FirebaseAuth.instance.currentUser?.uid;
-    if (uid == null) return;
-    try {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .set({'notifPrefs': Map<String, bool>.from(_prefs)},
-              SetOptions(merge: true));
-    } catch (_) {}
-  }
-
   @override
   Widget build(BuildContext context) {
+    final mgr = context.watch<NotificationPrefsManager>();
+
     return Scaffold(
       backgroundColor: AppColors.bg,
       body: SafeArea(
@@ -127,7 +79,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               ),
             ),
 
-            if (_loading)
+            if (mgr.loading)
               const Expanded(
                 child: Center(child: CircularProgressIndicator()),
               )
@@ -152,8 +104,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       ),
                       child: Column(
                         children: List.generate(_keys.length, (i) {
-                          final key = _keys[i];
+                          final key    = _keys[i];
                           final isLast = i == _keys.length - 1;
+                          final val    = mgr.valueOf(key);
                           return Column(
                             children: [
                               Padding(
@@ -167,12 +120,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                       decoration: BoxDecoration(
                                         color: AppColors.bg,
                                         borderRadius:
-                                            BorderRadius.circular(
-                                                10),
+                                            BorderRadius.circular(10),
                                       ),
                                       child: Icon(_iconFor(key),
                                           size: 17,
-                                          color: AppColors.ink),
+                                          color: val
+                                              ? AppColors.ink
+                                              : AppColors.muted),
                                     ),
                                     const SizedBox(width: 12),
                                     Expanded(
@@ -181,24 +135,25 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(_labels[key]!,
-                                              style: AppText.bodyS
-                                                  .copyWith(
-                                                      fontWeight:
-                                                          FontWeight
-                                                              .w600)),
+                                              style: AppText.bodyS.copyWith(
+                                                fontWeight: FontWeight.w600,
+                                                color: val
+                                                    ? AppColors.ink
+                                                    : AppColors.muted,
+                                              )),
                                           const SizedBox(height: 2),
                                           Text(_subs[key]!,
                                               style: AppText.caption
                                                   .copyWith(
-                                                      color: AppColors
-                                                          .muted)),
+                                                      color: AppColors.muted)),
                                         ],
                                       ),
                                     ),
                                     Switch.adaptive(
-                                      value: _prefs[key]!,
+                                      value: val,
                                       onChanged: (v) =>
-                                          _toggle(key, v),
+                                          context.read<NotificationPrefsManager>()
+                                              .toggle(key, v),
                                       activeTrackColor: AppColors.ink,
                                       activeThumbColor: Colors.white,
                                     ),
@@ -206,7 +161,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 ),
                               ),
                               if (!isLast)
-                                Divider(
+                                const Divider(
                                     height: 1,
                                     indent: 64,
                                     color: AppColors.line),
@@ -233,18 +188,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     );
   }
 
-  IconData _iconFor(String key) {
+  static IconData _iconFor(String key) {
     switch (key) {
-      case 'orderUpdates':
-        return Icons.inventory_2_outlined;
-      case 'newArrivals':
-        return Icons.new_releases_outlined;
-      case 'salesOffers':
-        return Icons.local_offer_outlined;
-      case 'wishlistAlerts':
-        return Icons.favorite_border;
-      default:
-        return Icons.notifications_none;
+      case 'orderUpdates':   return Icons.inventory_2_outlined;
+      case 'newArrivals':    return Icons.new_releases_outlined;
+      case 'salesOffers':    return Icons.local_offer_outlined;
+      case 'wishlistAlerts': return Icons.favorite_border;
+      default:               return Icons.notifications_none;
     }
   }
 }

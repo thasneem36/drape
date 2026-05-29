@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/cart_manager.dart';
+import '../data/notification_prefs_manager.dart';
 import '../data/models.dart';
 import '../services/firestore_service.dart';
 import '../core/constants/app_colors.dart';
@@ -169,21 +170,31 @@ class _HomeScreenState extends State<HomeScreen> {
           GestureDetector(
             onTap: () =>
                 Navigator.pushNamed(ctx, AppRoutes.notifications),
-            child: Container(
-              width: 44,
-              height: 44,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                      color: Color(0x14000000),
-                      blurRadius: 8,
-                      offset: Offset(0, 2))
-                ],
-              ),
-              child: const Icon(Icons.notifications_none_rounded,
-                  size: 20, color: AppColors.ink),
+            child: Consumer<NotificationPrefsManager>(
+              builder: (context, mgr, child) {
+                final allOff = mgr.allDisabled;
+                return Container(
+                  width: 44,
+                  height: 44,
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                          color: Color(0x14000000),
+                          blurRadius: 8,
+                          offset: Offset(0, 2))
+                    ],
+                  ),
+                  child: Icon(
+                    allOff
+                        ? Icons.notifications_off_outlined
+                        : Icons.notifications_none_rounded,
+                    size: 20,
+                    color: allOff ? AppColors.muted : AppColors.ink,
+                  ),
+                );
+              },
             ),
           ),
           const SizedBox(width: 10),

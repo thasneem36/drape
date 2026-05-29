@@ -6,6 +6,7 @@ import 'core/constants/app_text_styles.dart';
 import 'core/constants/app_spacing.dart';
 import 'core/routes/app_routes.dart';
 import 'data/cart_manager.dart';
+import 'data/notification_prefs_manager.dart';
 import 'data/order_manager.dart';
 import 'data/user_profile_manager.dart';
 import 'data/wishlist_manager.dart';
@@ -25,6 +26,7 @@ class DrapeApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => WishlistManager()),
         ChangeNotifierProvider(create: (_) => OrderManager()),
         ChangeNotifierProvider(create: (_) => UserProfileManager()),
+        ChangeNotifierProvider(create: (_) => NotificationPrefsManager()),
       ],
       child: MaterialApp(
         title: 'Drape',

@@ -29,6 +29,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   int  _paymentIdx     = 0;
   bool _showAddrForm   = false;
   bool _showPayForm    = false;
+  bool _placing        = false;
 
   // ── Confirm order ────────────────────────────────────────────
 
@@ -38,27 +39,37 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     List<Address> addresses,
     double total,
   ) async {
-    final address    = addresses[_addressIdx];
-    final addressStr = '${address.line1}, ${address.line2}';
-    final snapshot   = List<CartItem>.from(items);
+    if (_placing) return;
+    setState(() => _placing = true);
+    try {
+      final address    = addresses[_addressIdx];
+      final addressStr = '${address.line1}, ${address.line2}';
+      final snapshot   = List<CartItem>.from(items);
 
-    final orderId = await context
-        .read<OrderManager>()
-        .placeOrder(snapshot, addressStr, total);
-    await cart.clear();
+      final orderId = await context
+          .read<OrderManager>()
+          .placeOrder(snapshot, addressStr, total);
+      await cart.clear();
 
-    if (!mounted) return;
-    Navigator.pushNamedAndRemoveUntil(
-      context,
-      AppRoutes.orderConfirmation,
-      (r) => r.settings.name == AppRoutes.home,
-      arguments: OrderConfirmationArgs(
-        orderId: orderId,
-        items:   snapshot,
-        total:   total,
-        address: addressStr,
-      ),
-    );
+      if (!mounted) return;
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        AppRoutes.orderConfirmation,
+        (r) => r.settings.name == AppRoutes.home,
+        arguments: OrderConfirmationArgs(
+          orderId: orderId,
+          items:   snapshot,
+          total:   total,
+          address: addressStr,
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _placing = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Could not place order. Please try again.')),
+      );
+    }
   }
 
   // ── Save helpers ─────────────────────────────────────────────
@@ -215,10 +226,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   ),
                 ),
                 child: PrimaryButton(
-                  label: 'CONFIRM ORDER · \$${total.toStringAsFixed(2)}',
-                  icon: Icons.check_circle_outline,
-                  onTap: () => _confirmOrder(
-                      context.read<CartManager>(), items, addresses, total),
+                  label: _placing
+                      ? 'PLACING ORDER…'
+                      : 'CONFIRM ORDER · \$${total.toStringAsFixed(2)}',
+                  icon: _placing ? null : Icons.check_circle_outline,
+                  onTap: _placing
+                      ? null
+                      : () => _confirmOrder(
+                          context.read<CartManager>(), items, addresses, total),
                 ),
               ),
           ],

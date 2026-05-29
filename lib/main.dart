@@ -22,10 +22,6 @@ void main() async {
     webExperimentalForceLongPolling: true,
   );
 
-  // Seed Firestore with any new products from seed_data.json.
-  // Also patches imageUrl when it changes (e.g. dead Unsplash links).
-  await SeedService.run();
-
   // Dismiss the native splash — Flutter is ready.
   FlutterNativeSplash.remove();
 
@@ -37,4 +33,9 @@ void main() async {
   );
 
   runApp(const DrapeApp());
+
+  // Seed Firestore in the background after the app is running.
+  // Does not block startup — products load from Firestore immediately;
+  // seeding only patches changed imageUrls and writes genuinely new docs.
+  SeedService.run();
 }

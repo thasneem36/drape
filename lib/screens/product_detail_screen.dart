@@ -22,7 +22,7 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  int sizeIdx = 1;
+  int sizeIdx = 0;
   int colorIdx = 0;
   int qty = 1;
   bool descOpen = true;
@@ -39,16 +39,98 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       backgroundColor: AppColors.bg,
       body: Stack(
         children: [
-          // Hero
-          Positioned(
-            top: 0, left: 0, right: 0, height: 430,
-            child: ProductArt(
-              product: p,
-              borderRadius: BorderRadius.zero,
-              fontSize: 32,
+          // ── Scrollable content (image + detail sheet scroll together) ──
+          SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Hero image — scrolls with the page.
+                // A white rounded cap is stacked at the bottom to create the
+                // card-peels-off-photo effect without a negative margin.
+                Stack(
+                  children: [
+                    SizedBox(
+                      height: 430,
+                      child: ProductArt(
+                        product: p,
+                        borderRadius: BorderRadius.zero,
+                        fontSize: 32,
+                      ),
+                    ),
+                    Positioned(
+                      bottom: 0, left: 0, right: 0,
+                      height: 48,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: AppColors.surface,
+                          borderRadius: const BorderRadius.vertical(
+                              top: Radius.circular(AppRadius.sheet)),
+                          boxShadow: AppShadows.sheet,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                // Detail sheet — continues seamlessly below the rounded cap
+                Container(
+                  color: AppColors.surface,
+                  padding: const EdgeInsets.fromLTRB(22, 0, 22, 180),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Drag-handle pill
+                      Center(
+                        child: Container(
+                          width: 44, height: 4,
+                          decoration: BoxDecoration(
+                            color: Colors.black.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Text(p.brand.toUpperCase(),
+                          style: AppText.eyebrow.copyWith(letterSpacing: 2.4)),
+                      const SizedBox(height: 6),
+                      Text(p.name,
+                          style: AppText.titleXL.copyWith(
+                              fontStyle: FontStyle.italic)),
+                      const SizedBox(height: 14),
+                      Row(children: [
+                        _stars(p.rating),
+                        const SizedBox(width: 8),
+                        Text('${p.rating} · ${p.reviews} reviews',
+                            style: AppText.caption
+                                .copyWith(color: AppColors.muted)),
+                        const Spacer(),
+                        Text('\$${p.price.toStringAsFixed(0)}',
+                            style: AppText.titleM
+                                .copyWith(fontWeight: FontWeight.w700)),
+                      ]),
+                      const SizedBox(height: 28),
+                      _sizeSection(p),
+                      const SizedBox(height: 24),
+                      _colorSection(p),
+                      const SizedBox(height: 28),
+                      _expander('DESCRIPTION', descOpen, p.desc,
+                          () => setState(() => descOpen = !descOpen)),
+                      _expander(
+                          'COMPOSITION & CARE',
+                          careOpen,
+                          'Available in ${p.colors.join(', ')}. '
+                              'Sizes: ${p.sizes.join(', ')}. '
+                              'Dry clean recommended. Handle with care.',
+                          () => setState(() => careOpen = !careOpen)),
+                      const SizedBox(height: 18),
+                      _shippingCard(),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ),
-          // AppBar overlay
+
+          // ── Fixed AppBar overlay (back + wishlist always visible) ──
           Positioned(
             top: 0, left: 0, right: 0,
             child: SafeArea(
@@ -63,20 +145,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.85),
                           shape: BoxShape.circle,
-                          boxShadow: const [BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 2))],
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Color(0x14000000),
+                                blurRadius: 8,
+                                offset: Offset(0, 2))
+                          ],
                         ),
-                        child: const Icon(Icons.arrow_back, size: 20, color: AppColors.ink),
+                        child: const Icon(Icons.arrow_back,
+                            size: 20, color: AppColors.ink),
                       ),
                     ),
                     const Spacer(),
                     GestureDetector(
-                      onTap: () => context.read<WishlistManager>().toggle(p.id),
+                      onTap: () =>
+                          context.read<WishlistManager>().toggle(p.id),
                       child: Container(
                         width: 44, height: 44,
                         decoration: BoxDecoration(
                           color: Colors.white.withValues(alpha: 0.85),
                           shape: BoxShape.circle,
-                          boxShadow: const [BoxShadow(color: Color(0x14000000), blurRadius: 8, offset: Offset(0, 2))],
+                          boxShadow: const [
+                            BoxShadow(
+                                color: Color(0x14000000),
+                                blurRadius: 8,
+                                offset: Offset(0, 2))
+                          ],
                         ),
                         child: Icon(
                           saved ? Icons.favorite : Icons.favorite_border,
@@ -90,71 +184,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ),
           ),
-          // Detail sheet
-          Positioned.fill(
-            top: 380,
-            child: Container(
-              decoration: BoxDecoration(
-                color: AppColors.surface,
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(AppRadius.sheet)),
-                boxShadow: AppShadows.sheet,
-              ),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(22, 14, 22, 160),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Container(
-                        width: 44, height: 4,
-                        decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.12),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    Text(p.brand.toUpperCase(),
-                        style: AppText.eyebrow.copyWith(letterSpacing: 2.4)),
-                    const SizedBox(height: 6),
-                    Text(p.name,
-                        style: AppText.titleXL.copyWith(fontStyle: FontStyle.italic)),
-                    const SizedBox(height: 14),
-                    Row(children: [
-                      _stars(p.rating),
-                      const SizedBox(width: 8),
-                      Text('${p.rating} · ${p.reviews} reviews',
-                          style: AppText.caption.copyWith(color: AppColors.muted)),
-                      const Spacer(),
-                      Text('\$${p.price.toStringAsFixed(0)}',
-                          style: AppText.titleM.copyWith(fontWeight: FontWeight.w700)),
-                    ]),
-                    const SizedBox(height: 28),
-                    _sizeSection(p),
-                    const SizedBox(height: 24),
-                    _colorSection(p),
-                    const SizedBox(height: 28),
-                    _expander('DESCRIPTION', descOpen, p.desc,
-                        () => setState(() => descOpen = !descOpen)),
-                    _expander('COMPOSITION & CARE', careOpen,
-                        'Available in ${p.colors.join(', ')}. Sizes: ${p.sizes.join(', ')}. Dry clean recommended. Handle with care.',
-                        () => setState(() => careOpen = !careOpen)),
-                    const SizedBox(height: 18),
-                    _shippingCard(),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          // Bottom bar
+
+          // ── Fixed bottom action bar ────────────────────────────────
           Positioned(
             bottom: 0, left: 0, right: 0,
             child: _bottomBar(p),
           ),
+
+          // ── Added-to-bag toast ─────────────────────────────────────
           if (showToast)
             Positioned(
-              bottom: 130,
-              left: 0, right: 0,
+              bottom: 130, left: 0, right: 0,
               child: Center(child: _toast()),
             ),
         ],
@@ -196,7 +236,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   Widget _colorSection(Product p) => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('COLOR — ${p.colors[colorIdx]}', style: AppText.eyebrow),
+          Text('COLOR — ${p.colors.isNotEmpty ? p.colors[colorIdx] : '—'}', style: AppText.eyebrow),
           const SizedBox(height: 12),
           Row(children: [
             for (int i = 0; i < p.colors.length; i++) ...[
@@ -315,7 +355,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           child: PrimaryButton(
             label: 'ADD · \$${(p.price * qty).toStringAsFixed(0)}',
             icon: Icons.shopping_bag_outlined,
-            onTap: () {
+            onTap: (p.sizes.isEmpty || p.colors.isEmpty) ? null : () {
               context.read<CartManager>()
                   .add(p, p.sizes[sizeIdx], p.colors[colorIdx], qty: qty);
               setState(() => showToast = true);

@@ -62,7 +62,9 @@ class NotificationPrefsManager extends ChangeNotifier {
             {'notifPrefs': Map<String, bool>.from(_prefs)},
             SetOptions(merge: true),
           );
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('[NotificationPrefs] Failed to save: $e');
+    }
   }
 
   // ── Internal ──────────────────────────────────────────────
@@ -97,7 +99,9 @@ class NotificationPrefsManager extends ChangeNotifier {
           }
         }
       }
-    } catch (_) {}
+    } catch (e) {
+      debugPrint('[NotificationPrefs] Failed to load: $e');
+    }
     _loading = false;
     notifyListeners();
   }

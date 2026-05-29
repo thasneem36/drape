@@ -30,7 +30,7 @@ class _SearchScreenState extends State<SearchScreen> {
         results = results.where((p) => p.isSale).toList();
       } else {
         results = results
-            .where((p) => p.cat == _activeCategory)
+            .where((p) => p.cat.toLowerCase() == _activeCategory.toLowerCase())
             .toList();
       }
     }

@@ -38,7 +38,11 @@
       "Bash(sed -n '330,335p' lib/screens/home_screen.dart)",
       "Bash(sed -n '389,394p' lib/screens/home_screen.dart)",
       "Bash(sed -n '43,48p' lib/screens/order_history_screen.dart)",
-      "Bash(sed -n '166,172p' lib/screens/product_list_screen.dart)"
+      "Bash(sed -n '166,172p' lib/screens/product_list_screen.dart)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\thasn\\\\OneDrive\\\\Desktop\\\\flutter sell project\\\\thasneem\\\\drape\\\\lib\\\\core\\\\constants\\\\app_images.dart\" -ErrorAction SilentlyContinue)",
+      "Bash(Remove-Item \"C:\\\\Users\\\\thasn\\\\OneDrive\\\\Desktop\\\\flutter sell project\\\\thasneem\\\\drape\\\\lib\\\\shared\\\\widgets\\\\outlined_button_widget.dart\" -ErrorAction SilentlyContinue)",
+      "Bash(Write-Output \"done\")",
+      "PowerShell(\"done\")"
     ]
   }
 }

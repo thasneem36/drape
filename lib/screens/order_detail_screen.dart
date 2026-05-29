@@ -25,8 +25,8 @@ class OrderDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shipping = 9.99;
-    final subtotal = order.total - shipping;
+    const shipping = 9.99;
+    final subtotal = order.total > shipping ? order.total - shipping : 0.0;
 
     return Scaffold(
       backgroundColor: AppColors.bg,

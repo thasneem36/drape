@@ -246,21 +246,24 @@ class _ProductListScreenState extends State<ProductListScreen> {
                 ],
               ),
             ),
-            Container(
-              width: 44,
-              height: 44,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
-                boxShadow: [
-                  BoxShadow(
-                      color: Color(0x14000000),
-                      blurRadius: 8,
-                      offset: Offset(0, 2))
-                ],
+            GestureDetector(
+              onTap: _showSortSheet,
+              child: Container(
+                width: 44,
+                height: 44,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color(0x14000000),
+                        blurRadius: 8,
+                        offset: Offset(0, 2))
+                  ],
+                ),
+                child: const Icon(Icons.tune_rounded,
+                    size: 20, color: AppColors.ink),
               ),
-              child: const Icon(Icons.tune_rounded,
-                  size: 20, color: AppColors.ink),
             ),
           ],
         ),

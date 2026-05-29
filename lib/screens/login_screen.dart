@@ -38,11 +38,14 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() { _googleLoading = true; _error = null; });
     try {
       final result = await context.read<AuthService>().signInWithGoogle();
-      if (result == null && mounted) {
+      if (!mounted) return;
+      if (result == null) {
         // User cancelled the picker — not an error
         setState(() => _googleLoading = false);
+        return;
       }
-      // On success _AuthGate handles navigation automatically
+      // Navigate immediately — don't wait for authStateChanges round-trip
+      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (_) => false);
     } catch (e) {
       if (mounted) {
         setState(() {
@@ -74,8 +77,9 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() { _loading = true; _error = null; });
     try {
       await context.read<AuthService>().login(emailVal, pwVal);
-      // _AuthGate in app.dart will automatically navigate to HomeScreen
-      // once FirebaseAuth emits the signed-in user event.
+      if (!mounted) return;
+      // Navigate immediately — don't wait for authStateChanges round-trip
+      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (_) => false);
     } catch (e) {
       if (mounted) setState(() { _error = AuthService.errorMessage(e); _loading = false; });
     }

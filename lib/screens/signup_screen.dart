@@ -41,7 +41,13 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() { _googleLoading = true; _error = null; });
     try {
       final result = await context.read<AuthService>().signInWithGoogle();
-      if (result == null && mounted) setState(() => _googleLoading = false);
+      if (!mounted) return;
+      if (result == null) {
+        setState(() => _googleLoading = false);
+        return;
+      }
+      // Navigate immediately — don't wait for authStateChanges round-trip
+      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (_) => false);
     } catch (e) {
       if (mounted) {
         setState(() { _error = AuthService.errorMessage(e); _googleLoading = false; });
@@ -71,8 +77,9 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() { _loading = true; _error = null; });
     try {
       await context.read<AuthService>().signupWithName(name, email, pw);
-      // _AuthGate in app.dart will automatically navigate to HomeScreen
-      // once FirebaseAuth emits the signed-in user event.
+      if (!mounted) return;
+      // Navigate immediately — don't wait for authStateChanges round-trip
+      Navigator.pushNamedAndRemoveUntil(context, AppRoutes.home, (_) => false);
     } catch (e) {
       if (mounted) setState(() { _error = AuthService.errorMessage(e); _loading = false; });
     }

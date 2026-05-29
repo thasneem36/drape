@@ -5,6 +5,7 @@
 // ─────────────────────────────────────────────────────────────
 
 import 'dart:async';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ import '../data/notification_prefs_manager.dart';
 import '../data/models.dart';
 import '../services/firestore_service.dart';
 import '../core/constants/app_colors.dart';
+import '../core/constants/app_content.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/constants/app_spacing.dart';
 import '../core/routes/app_routes.dart';
@@ -21,37 +23,6 @@ import '../shared/widgets/bottom_nav_bar.dart';
 import '../shared/widgets/category_chip.dart';
 import '../shared/widgets/product_card.dart';
 import '../shared/widgets/drape_scaffold.dart';
-
-class _Offer {
-  final String eyebrow, title, sub;
-  final List<Color> bg;
-  final Color accent;
-  const _Offer(this.eyebrow, this.title, this.sub, this.bg, this.accent);
-}
-
-const _offers = [
-  _Offer(
-    'Spring Edit',
-    'Softness in Motion',
-    'New drops from our Studio atelier',
-    [Color(0xFF3D3328), Color(0xFF1F1A14)],
-    Color(0xFFE8D7C4),
-  ),
-  _Offer(
-    'Limited',
-    '40% off Silk',
-    'A curated farewell to the season',
-    [Color(0xFF8C5A3E), Color(0xFF5E3A26)],
-    Color(0xFFF3E0CC),
-  ),
-  _Offer(
-    'Members',
-    'Cashmere Club',
-    'Early access for wishlist members',
-    [Color(0xFF3A4A3F), Color(0xFF1E2A22)],
-    Color(0xFFD5E2D0),
-  ),
-];
 
 // UI-only navigation categories — not stored in Firestore.
 const _navCategories = [
@@ -79,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _timer = Timer.periodic(const Duration(milliseconds: 4500), (_) {
       if (!mounted) return;
-      setState(() => offer = (offer + 1) % _offers.length);
+      setState(() => offer = (offer + 1) % kHeroBanners.length);
     });
   }
 
@@ -112,7 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
           final allProducts = snap.data ?? [];
           final featured =
               allProducts.where((p) => p.isNew || p.isSale).toList();
-          final newArrivals = allProducts.take(4).toList();
+          final newArrivals = allProducts.where((p) => p.isNew).take(4).toList();
 
           void openPdp(Product p) =>
               Navigator.pushNamed(context, AppRoutes.pdp, arguments: p);
@@ -285,7 +256,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
   Widget _heroCard() {
-    final o = _offers[offer];
+    final o = kHeroBanners[offer];
     return Padding(
       padding: const EdgeInsets.fromLTRB(18, 18, 18, 0),
       child: AnimatedContainer(
@@ -300,93 +271,128 @@ class _HomeScreenState extends State<HomeScreen> {
           borderRadius: BorderRadius.circular(AppRadius.xl),
           boxShadow: AppShadows.md,
         ),
-        child: Stack(
-          children: [
-            Positioned(
-                top: -40,
-                right: -40,
-                child: _Ring(140, o.accent, 0.25)),
-            Positioned(
-                top: 30,
-                right: 60,
-                child: _Ring(80, o.accent, 0.18)),
-            Padding(
-              padding: const EdgeInsets.all(22),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Text(
-                    o.eyebrow.toUpperCase(),
-                    style: AppText.eyebrow.copyWith(color: o.accent),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    o.title,
-                    style: AppText.titleXL.copyWith(
-                      color: Colors.white,
-                      fontStyle: FontStyle.italic,
-                    ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    o.sub,
-                    style: AppText.bodyS.copyWith(color: Colors.white70),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(AppRadius.xl),
+          child: Stack(
+            fit: StackFit.expand,
+            children: [
+              // ── Photo on the right (with left-fade so text stays readable) ──
+              if (o.imageUrl.isNotEmpty)
+                Positioned(
+                  top: 0, right: 0, bottom: 0,
+                  width: 160,
+                  child: Stack(
+                    fit: StackFit.expand,
                     children: [
-                      Material(
-                        color: Colors.white,
-                        shape: const StadiumBorder(),
-                        child: InkWell(
-                          customBorder: const StadiumBorder(),
-                          onTap: () => Navigator.pushNamed(
-                              context, AppRoutes.products),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 18, vertical: 10),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text('EXPLORE',
-                                    style: AppText.label
-                                        .copyWith(color: AppColors.ink)),
-                                const SizedBox(width: 8),
-                                const Icon(Icons.arrow_forward,
-                                    size: 13, color: AppColors.ink),
-                              ],
-                            ),
+                      CachedNetworkImage(
+                        imageUrl: o.imageUrl,
+                        fit: BoxFit.cover,
+                        placeholder: (_, _) => const SizedBox.shrink(),
+                        errorWidget: (_, _, _) => const SizedBox.shrink(),
+                      ),
+                      // Gradient fade: left edge blends into card background
+                      DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                            colors: [
+                              o.bg.first,
+                              o.bg.first.withValues(alpha: 0.0),
+                            ],
+                            stops: const [0.0, 0.45],
                           ),
                         ),
                       ),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: List.generate(_offers.length, (i) {
-                          return AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            margin: const EdgeInsets.only(left: 6),
-                            height: 6,
-                            width: i == offer ? 22 : 6,
-                            decoration: BoxDecoration(
-                              color: i == offer
-                                  ? Colors.white
-                                  : Colors.white38,
-                              borderRadius: BorderRadius.circular(3),
-                            ),
-                          );
-                        }),
-                      ),
                     ],
                   ),
-                ],
+                ),
+
+              // ── Decorative rings (only show when there is no image) ──
+              if (o.imageUrl.isEmpty) ...[
+                Positioned(top: -40, right: -40, child: _Ring(140, o.accent, 0.25)),
+                Positioned(top: 30, right: 60, child: _Ring(80, o.accent, 0.18)),
+              ],
+
+              // ── Text + buttons ─────────────────────────────────────────
+              Padding(
+                padding: const EdgeInsets.all(22),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      o.eyebrow.toUpperCase(),
+                      style: AppText.eyebrow.copyWith(color: o.accent),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      o.title,
+                      style: AppText.titleXL.copyWith(
+                        color: Colors.white,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      o.sub,
+                      style: AppText.bodyS.copyWith(color: Colors.white70),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const Spacer(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Material(
+                          color: Colors.white,
+                          shape: const StadiumBorder(),
+                          child: InkWell(
+                            customBorder: const StadiumBorder(),
+                            onTap: () => Navigator.pushNamed(
+                                context, AppRoutes.products),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 18, vertical: 10),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text('EXPLORE',
+                                      style: AppText.label
+                                          .copyWith(color: AppColors.ink)),
+                                  const SizedBox(width: 8),
+                                  const Icon(Icons.arrow_forward,
+                                      size: 13, color: AppColors.ink),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: List.generate(kHeroBanners.length, (i) {
+                            return AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              margin: const EdgeInsets.only(left: 6),
+                              height: 6,
+                              width: i == offer ? 22 : 6,
+                              decoration: BoxDecoration(
+                                color: i == offer
+                                    ? Colors.white
+                                    : Colors.white38,
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                            );
+                          }),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -496,57 +502,93 @@ class _HomeScreenState extends State<HomeScreen> {
             borderRadius: BorderRadius.circular(AppRadius.xl),
             boxShadow: AppShadows.md,
           ),
-          child: Stack(
-            children: [
-              Positioned(
-                  top: 0,
-                  right: -40,
-                  child: _Ring(220, AppColors.accent, 0.25)),
-              Positioned(
-                  top: 30,
-                  right: 10,
-                  child: _Ring(140, AppColors.accent, 0.18)),
-              Padding(
-                padding: const EdgeInsets.all(28),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('THE QUIET EDIT',
-                        style: AppText.eyebrow
-                            .copyWith(color: AppColors.accentSoft)),
-                    const SizedBox(height: 6),
-                    SizedBox(
-                      width: 210,
-                      child: Text(
-                        'Made slowly. Worn for years.',
-                        style: AppText.titleXL.copyWith(
-                          color: Colors.white,
-                          fontStyle: FontStyle.italic,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(AppRadius.xl),
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                // ── Photo on the right ──────────────────────────────────
+                if (kCampaignImageUrl.isNotEmpty)
+                  Positioned(
+                    top: 0, right: 0, bottom: 0,
+                    width: 160,
+                    child: Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: kCampaignImageUrl,
+                          fit: BoxFit.cover,
+                          placeholder: (_, _) => const SizedBox.shrink(),
+                          errorWidget: (_, _, _) => const SizedBox.shrink(),
+                        ),
+                        // Fade left edge into card background
+                        const DecoratedBox(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                              colors: [Color(0xFF1A1816), Colors.transparent],
+                              stops: [0.0, 0.45],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                // ── Decorative rings (only when no image) ──────────────
+                if (kCampaignImageUrl.isEmpty) ...[
+                  Positioned(
+                      top: 0, right: -40,
+                      child: _Ring(220, AppColors.accent, 0.25)),
+                  Positioned(
+                      top: 30, right: 10,
+                      child: _Ring(140, AppColors.accent, 0.18)),
+                ],
+
+                // ── Text + button ───────────────────────────────────────
+                Padding(
+                  padding: const EdgeInsets.all(28),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('THE QUIET EDIT',
+                          style: AppText.eyebrow
+                              .copyWith(color: AppColors.accentSoft)),
+                      const SizedBox(height: 6),
+                      SizedBox(
+                        width: 210,
+                        child: Text(
+                          'Made slowly. Worn for years.',
+                          style: AppText.titleXL.copyWith(
+                            color: Colors.white,
+                            fontStyle: FontStyle.italic,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 16),
-                    GestureDetector(
-                      onTap: () => _showStory(context),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 9),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.4)),
-                          borderRadius:
-                              BorderRadius.circular(AppRadius.pill),
+                      const SizedBox(height: 16),
+                      GestureDetector(
+                        onTap: () => _showStory(context),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 16, vertical: 9),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                color: Colors.white.withValues(alpha: 0.4)),
+                            borderRadius:
+                                BorderRadius.circular(AppRadius.pill),
+                          ),
+                          child: Text('READ THE STORY →',
+                              style: AppText.label
+                                  .copyWith(color: Colors.white)),
                         ),
-                        child: Text('READ THE STORY →',
-                            style: AppText.label
-                                .copyWith(color: Colors.white)),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       );

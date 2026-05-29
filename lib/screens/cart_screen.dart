@@ -333,31 +333,36 @@ class _Badge extends StatelessWidget {
 class _PromoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-          horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: AppColors.surface2,
-        borderRadius: BorderRadius.circular(AppRadius.base),
-        border:
-            Border.all(color: AppColors.lineStrong),
+    return GestureDetector(
+      onTap: () => ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Promo codes coming soon.')),
       ),
-      child: Row(
-        children: [
-          const Icon(Icons.auto_awesome,
-              size: 16, color: AppColors.accentInk),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Text(
-              'Members save 15% — join the Club',
-              style: AppText.caption.copyWith(
-                  color: AppColors.textSecondary, fontSize: 12.5),
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+            horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: AppColors.surface2,
+          borderRadius: BorderRadius.circular(AppRadius.base),
+          border:
+              Border.all(color: AppColors.lineStrong),
+        ),
+        child: Row(
+          children: [
+            const Icon(Icons.auto_awesome,
+                size: 16, color: AppColors.accentInk),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Members save 15% — join the Club',
+                style: AppText.caption.copyWith(
+                    color: AppColors.textSecondary, fontSize: 12.5),
+              ),
             ),
-          ),
-          Text('APPLY',
-              style: AppText.label.copyWith(
-                  color: AppColors.accentInk, fontSize: 11)),
-        ],
+            Text('APPLY',
+                style: AppText.label.copyWith(
+                    color: AppColors.accentInk, fontSize: 11)),
+          ],
+        ),
       ),
     );
   }

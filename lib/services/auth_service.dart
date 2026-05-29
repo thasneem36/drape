@@ -25,10 +25,12 @@ class AuthService extends ChangeNotifier {
       email: email.trim(),
       password: password,
     );
-    await cred.user?.updateDisplayName(name.trim());
+    final newUser = cred.user;
+    if (newUser == null) return;
+    await newUser.updateDisplayName(name.trim());
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(cred.user!.uid)
+        .doc(newUser.uid)
         .set({
       'name': name.trim(),
       'email': email.trim(),
@@ -52,7 +54,8 @@ class AuthService extends ChangeNotifier {
     );
 
     final userCred = await _auth.signInWithCredential(credential);
-    final user = userCred.user!;
+    final user = userCred.user;
+    if (user == null) return userCred;
 
     // Create a Firestore user doc if this is a new Google user.
     final ref = FirebaseFirestore.instance.collection('users').doc(user.uid);
@@ -71,7 +74,11 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> signOut() async {
-    await GoogleSignIn().signOut(); // clears Google session so picker shows next time
+    // GoogleSignIn.signOut() can throw on web or when the user signed in
+    // with email (not Google). Swallow the error so _auth.signOut() always runs.
+    try {
+      await GoogleSignIn().signOut();
+    } catch (_) {}
     await _auth.signOut();
   }
 

@@ -55,6 +55,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         : nameForInitials
             .trim()
             .split(' ')
+            .where((w) => w.isNotEmpty)
             .map((w) => w[0])
             .take(2)
             .join()
@@ -180,7 +181,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               _Divider(),
                               _StatBox('$wlCount', 'SAVED'),
                               _Divider(),
-                              const _StatBox('850', 'POINTS'),
+                              const _StatBox('—', 'POINTS'),
                             ],
                           ),
                         ),
@@ -262,12 +263,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 icon: Icons.logout,
                 label: 'Sign Out',
                 sub: profile.email,
-                onTap: () {
-                  context.read<AuthService>().signOut().then((_) {
-                    if (!context.mounted) return;
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                        AppRoutes.onboarding, (_) => false);
-                  });
+                onTap: () async {
+                  // signOut() is now safe — GoogleSignIn errors are swallowed
+                  // inside AuthService so _auth.signOut() always completes.
+                  await context.read<AuthService>().signOut();
+                  if (!context.mounted) return;
+                  Navigator.of(context).pushNamedAndRemoveUntil(
+                      AppRoutes.onboarding, (_) => false);
                 },
                 destructive: true,
               ),

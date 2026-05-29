@@ -18,6 +18,7 @@ import '../../screens/privacy_screen.dart';
 import '../../screens/help_screen.dart';
 import '../../screens/order_detail_screen.dart';
 import '../../screens/order_confirmation_screen.dart';
+import '../../screens/notification_inbox_screen.dart';
 import '../../data/models.dart';
 
 class AppRoutes {
@@ -41,7 +42,8 @@ class AppRoutes {
   static const String privacy       = '/privacy';
   static const String help          = '/help';
   static const String orderDetail        = '/order-detail';
-  static const String orderConfirmation  = '/order-confirmation';
+  static const String orderConfirmation    = '/order-confirmation';
+  static const String notificationInbox   = '/notification-inbox';
 
   static Route<dynamic>? onGenerate(RouteSettings s) {
     switch (s.name) {
@@ -74,6 +76,8 @@ class AppRoutes {
         final a = s.arguments as OrderConfirmationArgs?;
         if (a == null) return _fade(const HomeScreen());
         return _fade(OrderConfirmationScreen(args: a));
+      case notificationInbox:
+        return _fade(const NotificationInboxScreen());
       default:            return _fade(const HomeScreen());
     }
   }

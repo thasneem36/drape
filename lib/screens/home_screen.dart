@@ -169,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           GestureDetector(
             onTap: () =>
-                Navigator.pushNamed(ctx, AppRoutes.notifications),
+                Navigator.pushNamed(ctx, AppRoutes.notificationInbox),
             child: Consumer<NotificationPrefsManager>(
               builder: (context, mgr, child) {
                 final allOff = mgr.allDisabled;

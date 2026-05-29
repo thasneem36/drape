@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "299569825147",
+    "project_id": "drape-c1e40",
+    "storage_bucket": "drape-c1e40.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:299569825147:android:e3a7380be188b3d17f69de",
+        "android_client_info": {
+          "package_name": "com.example.drape"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLVSEqLaH2tzvbIpeWBrqZfGzZEwbdTD8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,11 +1,11 @@
 // ─────────────────────────────────────────────────────────────
-// Cart screen.
+// Cart screen — reads product metadata directly from CartItem
+// (stored in Firestore at add-to-cart time).
 // ─────────────────────────────────────────────────────────────
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../data/cart_manager.dart';
-import '../data/dummy_data.dart';
 import '../data/models.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
@@ -45,35 +45,34 @@ class CartScreen extends StatelessWidget {
                 : Stack(
                     children: [
                       ListView(
-                        padding: const EdgeInsets.fromLTRB(18, 4, 18, 220),
+                        padding: const EdgeInsets.fromLTRB(
+                            18, 4, 18, 220),
                         children: [
                           Padding(
-                            padding: const EdgeInsets.only(top: 6, bottom: 16),
+                            padding: const EdgeInsets.only(
+                                top: 6, bottom: 16),
                             child: Text(
                               '${items.length} ${items.length == 1 ? 'item' : 'items'}',
                               style: AppText.caption.copyWith(
-                                color: AppColors.muted,
-                              ),
+                                  color: AppColors.muted),
                             ),
                           ),
                           ...List.generate(items.length, (i) {
                             final it = items[i];
-                            final p = DummyData.byId(it.productId);
                             return Padding(
-                              padding: const EdgeInsets.only(bottom: 14),
+                              padding: const EdgeInsets.only(
+                                  bottom: 14),
                               child: _CartRow(
                                 item: it,
-                                product: p,
-                                onRemove: () =>
-                                    context.read<CartManager>().removeAt(i),
-                                onInc: () => context.read<CartManager>().setQty(
-                                  i,
-                                  it.qty + 1,
-                                ),
-                                onDec: () => context.read<CartManager>().setQty(
-                                  i,
-                                  it.qty - 1,
-                                ),
+                                onRemove: () => context
+                                    .read<CartManager>()
+                                    .removeAt(i),
+                                onInc: () => context
+                                    .read<CartManager>()
+                                    .setQty(i, it.qty + 1),
+                                onDec: () => context
+                                    .read<CartManager>()
+                                    .setQty(i, it.qty - 1),
                               ),
                             );
                           }),
@@ -94,7 +93,8 @@ class CartScreen extends StatelessWidget {
                         child: SafeArea(
                           top: false,
                           child: Container(
-                            padding: const EdgeInsets.fromLTRB(18, 16, 18, 10),
+                            padding: const EdgeInsets.fromLTRB(
+                                18, 16, 18, 10),
                             decoration: const BoxDecoration(
                               gradient: LinearGradient(
                                 begin: Alignment.topCenter,
@@ -108,12 +108,11 @@ class CartScreen extends StatelessWidget {
                               ),
                             ),
                             child: PrimaryButton(
-                              label: 'CHECKOUT · \$${total.toStringAsFixed(2)}',
+                              label:
+                                  'CHECKOUT · \$${total.toStringAsFixed(2)}',
                               icon: Icons.arrow_forward,
                               onTap: () => Navigator.pushNamed(
-                                context,
-                                AppRoutes.checkout,
-                              ),
+                                  context, AppRoutes.checkout),
                             ),
                           ),
                         ),
@@ -132,44 +131,44 @@ class _AppBarRow extends StatelessWidget {
   const _AppBarRow({required this.title});
   @override
   Widget build(BuildContext context) => Padding(
-    padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
-    child: Row(
-      children: [
-        GestureDetector(
-          onTap: () => Navigator.maybePop(context),
-          child: Container(
-            width: 44,
-            height: 44,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(
-                  color: Color(0x14000000),
-                  blurRadius: 8,
-                  offset: Offset(0, 2),
+        padding: const EdgeInsets.fromLTRB(18, 10, 18, 10),
+        child: Row(
+          children: [
+            GestureDetector(
+              onTap: () => Navigator.maybePop(context),
+              child: Container(
+                width: 44,
+                height: 44,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                        color: Color(0x14000000),
+                        blurRadius: 8,
+                        offset: Offset(0, 2))
+                  ],
                 ),
-              ],
+                child: const Icon(Icons.arrow_back,
+                    size: 20, color: AppColors.ink),
+              ),
             ),
-            child: const Icon(Icons.arrow_back, size: 20, color: AppColors.ink),
-          ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Text(title,
+                  style: AppText.titleS.copyWith(fontSize: 18)),
+            ),
+          ],
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: Text(title, style: AppText.titleS.copyWith(fontSize: 18)),
-        ),
-      ],
-    ),
-  );
+      );
 }
 
+/// Cart row — uses product metadata embedded in CartItem.
 class _CartRow extends StatelessWidget {
   final CartItem item;
-  final Product product;
   final VoidCallback onRemove, onInc, onDec;
   const _CartRow({
     required this.item,
-    required this.product,
     required this.onRemove,
     required this.onInc,
     required this.onDec,
@@ -190,9 +189,11 @@ class _CartRow extends StatelessWidget {
           SizedBox(
             width: 86,
             height: 108,
-            child: ProductArt(
-              product: product,
-              fontSize: 11,
+            child: ProductThumbnail(
+              imageUrl: item.imageUrl,
+              fallbackLabel: item.name.isNotEmpty
+                  ? item.name[0].toLowerCase()
+                  : null,
               borderRadius: BorderRadius.circular(AppRadius.md),
             ),
           ),
@@ -205,15 +206,14 @@ class _CartRow extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment:
+                            CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            product.brand.toUpperCase(),
-                            style: AppText.eyebrow,
-                          ),
+                          Text(item.brand.toUpperCase(),
+                              style: AppText.eyebrow),
                           const SizedBox(height: 3),
                           Text(
-                            product.name,
+                            item.name,
                             style: AppText.productName,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
@@ -227,11 +227,8 @@ class _CartRow extends StatelessWidget {
                       child: const SizedBox(
                         width: 28,
                         height: 28,
-                        child: Icon(
-                          Icons.close,
-                          size: 15,
-                          color: AppColors.muted,
-                        ),
+                        child: Icon(Icons.close,
+                            size: 15, color: AppColors.muted),
                       ),
                     ),
                   ],
@@ -253,8 +250,10 @@ class _CartRow extends StatelessWidget {
                   children: [
                     Container(
                       decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.lineStrong),
-                        borderRadius: BorderRadius.circular(AppRadius.md),
+                        border: Border.all(
+                            color: AppColors.lineStrong),
+                        borderRadius:
+                            BorderRadius.circular(AppRadius.md),
                       ),
                       child: Row(
                         children: [
@@ -262,12 +261,9 @@ class _CartRow extends StatelessWidget {
                           SizedBox(
                             width: 22,
                             child: Center(
-                              child: Text(
-                                '${item.qty}',
-                                style: AppText.caption.copyWith(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
+                              child: Text('${item.qty}',
+                                  style: AppText.caption.copyWith(
+                                      fontWeight: FontWeight.w700)),
                             ),
                           ),
                           _roundBtn(Icons.add, onInc),
@@ -276,10 +272,9 @@ class _CartRow extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      '\$${(product.price * item.qty).toStringAsFixed(2)}',
+                      '\$${(item.price * item.qty).toStringAsFixed(2)}',
                       style: AppText.bodyM.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
+                          fontWeight: FontWeight.w700),
                     ),
                   ],
                 ),
@@ -291,10 +286,14 @@ class _CartRow extends StatelessWidget {
     );
   }
 
-  Widget _roundBtn(IconData icon, VoidCallback onTap) => InkWell(
-    onTap: onTap,
-    child: SizedBox(width: 28, height: 28, child: Icon(icon, size: 12)),
-  );
+  Widget _roundBtn(IconData icon, VoidCallback onTap) =>
+      InkWell(
+        onTap: onTap,
+        child: SizedBox(
+            width: 28,
+            height: 28,
+            child: Icon(icon, size: 12)),
+      );
 }
 
 class _Badge extends StatelessWidget {
@@ -304,7 +303,8 @@ class _Badge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding:
+          const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         color: AppColors.ink.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(AppRadius.xs + 2),
@@ -316,17 +316,14 @@ class _Badge extends StatelessWidget {
             Container(
               width: 8,
               height: 8,
-              decoration: BoxDecoration(color: swatch, shape: BoxShape.circle),
+              decoration: BoxDecoration(
+                  color: swatch, shape: BoxShape.circle),
             ),
             const SizedBox(width: 5),
           ],
-          Text(
-            label,
-            style: AppText.caption.copyWith(
-              color: AppColors.textSecondary,
-              fontSize: 10.5,
-            ),
-          ),
+          Text(label,
+              style: AppText.caption.copyWith(
+                  color: AppColors.textSecondary, fontSize: 10.5)),
         ],
       ),
     );
@@ -337,35 +334,29 @@ class _PromoRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(
+          horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
         color: AppColors.surface2,
         borderRadius: BorderRadius.circular(AppRadius.base),
-        border: Border.all(
-          color: AppColors.lineStrong,
-          style: BorderStyle.solid,
-        ),
+        border:
+            Border.all(color: AppColors.lineStrong),
       ),
       child: Row(
         children: [
-          const Icon(Icons.auto_awesome, size: 16, color: AppColors.accentInk),
+          const Icon(Icons.auto_awesome,
+              size: 16, color: AppColors.accentInk),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               'Members save 15% — join the Club',
               style: AppText.caption.copyWith(
-                color: AppColors.textSecondary,
-                fontSize: 12.5,
-              ),
+                  color: AppColors.textSecondary, fontSize: 12.5),
             ),
           ),
-          Text(
-            'APPLY',
-            style: AppText.label.copyWith(
-              color: AppColors.accentInk,
-              fontSize: 11,
-            ),
-          ),
+          Text('APPLY',
+              style: AppText.label.copyWith(
+                  color: AppColors.accentInk, fontSize: 11)),
         ],
       ),
     );
@@ -403,23 +394,29 @@ class _SummaryCard extends StatelessWidget {
   }
 }
 
-Widget summaryRow(String label, double value, {bool bold = false}) => Padding(
-  padding: const EdgeInsets.symmetric(vertical: 4),
-  child: Row(
-    children: [
-      Text(
-        label,
-        style: bold
-            ? AppText.bodyM.copyWith(fontWeight: FontWeight.w700)
-            : AppText.bodyS.copyWith(color: AppColors.textSecondary),
+Widget summaryRow(String label, double value,
+        {bool bold = false}) =>
+    Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: Row(
+        children: [
+          Text(
+            label,
+            style: bold
+                ? AppText.bodyM
+                    .copyWith(fontWeight: FontWeight.w700)
+                : AppText.bodyS
+                    .copyWith(color: AppColors.textSecondary),
+          ),
+          const Spacer(),
+          Text(
+            '\$${value.toStringAsFixed(2)}',
+            style: bold
+                ? AppText.titleM
+                    .copyWith(fontWeight: FontWeight.w700)
+                : AppText.bodyS
+                    .copyWith(fontWeight: FontWeight.w600),
+          ),
+        ],
       ),
-      const Spacer(),
-      Text(
-        '\$${value.toStringAsFixed(2)}',
-        style: bold
-            ? AppText.titleM.copyWith(fontWeight: FontWeight.w700)
-            : AppText.bodyS.copyWith(fontWeight: FontWeight.w600),
-      ),
-    ],
-  ),
-);
+    );

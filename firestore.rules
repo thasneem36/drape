@@ -1,0 +1,84 @@
+rules_version = '2';
+
+// ─────────────────────────────────────────────────────────────
+// Drape — Firestore Security Rules
+//
+// Deploy with:  firebase deploy --only firestore:rules
+// Or paste the contents of this file directly into the
+// Firebase Console → Firestore Database → Rules tab.
+// ─────────────────────────────────────────────────────────────
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ─────────────────────────────────────
+
+    // True when the request comes from a signed-in user.
+    function isAuth() {
+      return request.auth != null;
+    }
+
+    // True when the signed-in user's UID matches the given userId.
+    function isOwner(userId) {
+      return isAuth() && request.auth.uid == userId;
+    }
+
+    // ── Products ─────────────────────────────────────────────
+    // Public read (anyone can browse the catalogue).
+    // Authenticated users can CREATE new products (used by SeedService
+    // on first run). Updates and deletes are blocked — once seeded,
+    // products are managed via the Firebase Console only.
+    //
+    // ⚠️  AFTER your initial seed has run successfully, you can
+    // tighten this to:  allow write: if false;
+    match /products/{productId} {
+      allow read:   if true;
+      allow create: if isAuth();
+      allow update,
+            delete: if false;
+    }
+
+    // ── App config ────────────────────────────────────────────
+    // Internal config (seed state, feature flags etc.).
+    // No direct client access.
+    match /app_config/{document=**} {
+      allow read, write: if false;
+    }
+
+    // ── Users ─────────────────────────────────────────────────
+    // Each user can only read and write their own document.
+    match /users/{userId} {
+      allow read, write: if isOwner(userId);
+
+      // Cart subcollection — owner only.
+      match /cart/{itemId} {
+        allow read, write: if isOwner(userId);
+      }
+
+      // Wishlist subcollection — owner only.
+      match /wishlist/{productId} {
+        allow read, write: if isOwner(userId);
+      }
+    }
+
+    // ── Orders ───────────────────────────────────────────────
+    // Users can read their own orders (matched by userId field).
+    // Users can create an order only if it's stamped with their UID.
+    // No client updates or deletes — order status is managed
+    // server-side (Cloud Functions or Firebase Console).
+    match /orders/{orderId} {
+      allow read: if isAuth()
+                  && resource.data.userId == request.auth.uid;
+
+      allow create: if isAuth()
+                    && request.resource.data.userId == request.auth.uid
+                    && request.resource.data.keys().hasAll([
+                         'userId', 'items', 'totalPrice',
+                         'address', 'status'
+                       ]);
+
+      allow update, delete: if false;
+    }
+
+  }
+}

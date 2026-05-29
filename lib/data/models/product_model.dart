@@ -1,5 +1,5 @@
 class Product {
-  final String id, name, brand, cat, desc, art;
+  final String id, name, brand, cat, desc, art, imageUrl;
   final double price;
   final List<String> sizes, colors;
   final double rating;
@@ -12,6 +12,6 @@ class Product {
     required this.price, required this.cat, required this.desc,
     required this.sizes, required this.colors,
     required this.rating, required this.reviews, required this.tint,
-    this.art = '', this.isNew = false, this.isSale = false,
+    this.art = '', this.imageUrl = '', this.isNew = false, this.isSale = false,
   });
 }
